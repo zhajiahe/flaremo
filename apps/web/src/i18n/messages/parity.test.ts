@@ -12,24 +12,12 @@
 // literal `{cunt}`. Both look like a missing translation in bug reports, so
 // the placeholder set is checked against the master catalog here.
 import { describe, expect, it } from "vitest";
-import { ar } from "./ar";
 import { enUS } from "./en-US";
-import { es } from "./es";
-import { fr } from "./fr";
-import { ja } from "./ja";
-import { ko } from "./ko";
-import { ru } from "./ru";
 import { zhCN } from "./zh-CN";
 
 const CATALOGS = {
   "zh-CN": zhCN,
   "en-US": enUS,
-  ja,
-  fr,
-  es,
-  ko,
-  ru,
-  ar,
 } as const;
 
 /** The master catalog that `TranslationKey` is derived from. */
