@@ -48,18 +48,9 @@ export type ShowcaseContent = {
 
 /** Keep locale modules out of the entry chunk; the homepage route loads one
  *  translation set in parallel with the rest of its copy. */
-const SHOWCASE_LOADERS: Record<
-  SupportedLocale,
-  () => Promise<ShowcaseContent>
-> = {
+const SHOWCASE_LOADERS: Record<SupportedLocale, () => Promise<ShowcaseContent>> = {
   en: () => import("./showcase/en").then(({ EN_SHOWCASE }) => EN_SHOWCASE),
   zh: () => import("./showcase/zh").then(({ ZH_SHOWCASE }) => ZH_SHOWCASE),
-  ja: () => import("./showcase/ja").then(({ JA_SHOWCASE }) => JA_SHOWCASE),
-  fr: () => import("./showcase/fr").then(({ FR_SHOWCASE }) => FR_SHOWCASE),
-  es: () => import("./showcase/es").then(({ ES_SHOWCASE }) => ES_SHOWCASE),
-  ko: () => import("./showcase/ko").then(({ KO_SHOWCASE }) => KO_SHOWCASE),
-  ru: () => import("./showcase/ru").then(({ RU_SHOWCASE }) => RU_SHOWCASE),
-  ar: () => import("./showcase/ar").then(({ AR_SHOWCASE }) => AR_SHOWCASE),
 };
 
 export function loadShowcaseContent(locale: Locale): Promise<ShowcaseContent> {

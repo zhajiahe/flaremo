@@ -20,7 +20,7 @@ const root = path.resolve(dirname, "..");
 const outDir = path.join(root, "dist", "site");
 const manifestPath = path.join(outDir, ".vite", "manifest.json");
 
-const SUPPORTED_LOCALES = ["en", "zh", "ja", "fr", "es", "ko", "ru", "ar"];
+const SUPPORTED_LOCALES = ["en", "zh"];
 
 /** Keep in sync with the ZH_DOCS/EN_DOCS metadata in docs-source.generated.ts. */
 const DOC_SLUGS = [
@@ -166,27 +166,11 @@ function buildSitemap(paths) {
   const LOCALES = [
     { code: "en", prefix: "" },
     { code: "zh-CN", prefix: "/zh" },
-    { code: "ja", prefix: "/ja" },
-    { code: "fr", prefix: "/fr" },
-    { code: "es", prefix: "/es" },
-    { code: "ko", prefix: "/ko" },
-    { code: "ru", prefix: "/ru" },
-    { code: "ar", prefix: "/ar" },
   ];
 
   const cleanPath = (p) => {
     let s = p.startsWith("/") ? p : `/${p}`;
-    for (const prefix of [
-      "/zh-CN",
-      "/en",
-      "/zh",
-      "/ja",
-      "/fr",
-      "/es",
-      "/ko",
-      "/ru",
-      "/ar",
-    ]) {
+    for (const prefix of ["/zh-CN", "/en", "/zh"]) {
       if (s === prefix) return "/";
       if (s.startsWith(`${prefix}/`)) return s.slice(prefix.length) || "/";
     }

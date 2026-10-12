@@ -46,12 +46,6 @@ export type HomeContent = {
 const HOME_LOADERS: Record<SupportedLocale, () => Promise<HomeContent>> = {
   en: () => import("./home/en").then(({ EN_HOME }) => EN_HOME),
   zh: () => import("./home/zh").then(({ ZH_HOME }) => ZH_HOME),
-  ja: () => import("./home/ja").then(({ JA_HOME }) => JA_HOME),
-  fr: () => import("./home/fr").then(({ FR_HOME }) => FR_HOME),
-  es: () => import("./home/es").then(({ ES_HOME }) => ES_HOME),
-  ko: () => import("./home/ko").then(({ KO_HOME }) => KO_HOME),
-  ru: () => import("./home/ru").then(({ RU_HOME }) => RU_HOME),
-  ar: () => import("./home/ar").then(({ AR_HOME }) => AR_HOME),
 };
 
 export function loadHomeContent(locale: Locale): Promise<HomeContent> {
