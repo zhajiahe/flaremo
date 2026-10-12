@@ -10,12 +10,6 @@ import { getLocaleFromPath, type SupportedLocale } from "@/lib/seo";
 const HEADINGS: Record<SupportedLocale, string> = {
   en: "Documentation",
   zh: "文档总览",
-  ja: "ドキュメント総覧",
-  fr: "Documentation",
-  es: "Documentación",
-  ko: "문서 개요",
-  ru: "Обзор документации",
-  ar: "نظرة عامة على المستندات",
 };
 
 export function DocsIndexPage() {
