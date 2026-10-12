@@ -21,12 +21,6 @@ import { cn } from "@/lib/utils";
 const LOCALE_SHORT_LABELS: Record<SupportedLocale, string> = {
   zh: "中文",
   en: "EN",
-  ja: "日本語",
-  fr: "FR",
-  es: "ES",
-  ko: "한국어",
-  ru: "RU",
-  ar: "العربية",
 };
 
 type LocaleSwitcherProps = {

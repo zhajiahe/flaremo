@@ -4,31 +4,13 @@
  * for title/description/og/twitter/canonical/hreflang/json-ld.
  */
 
-export const SUPPORTED_LOCALES = [
-  "en",
-  "zh",
-  "ja",
-  "fr",
-  "es",
-  "ko",
-  "ru",
-  "ar",
-] as const;
+export const SUPPORTED_LOCALES = ["en", "zh"] as const;
 
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 export type Locale = SupportedLocale | "zh-CN" | "en-US";
 
 export function normalizeLocale(l?: string): SupportedLocale {
-  if (!l) return "en";
-  const lower = l.toLowerCase();
-  if (lower.startsWith("zh")) return "zh";
-  if (lower.startsWith("ja")) return "ja";
-  if (lower.startsWith("fr")) return "fr";
-  if (lower.startsWith("es")) return "es";
-  if (lower.startsWith("ko")) return "ko";
-  if (lower.startsWith("ru")) return "ru";
-  if (lower.startsWith("ar")) return "ar";
-  return "en";
+  return l?.toLowerCase().startsWith("zh") ? "zh" : "en";
 }
 
 export type SeoInput = {
@@ -64,31 +46,19 @@ const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.svg`;
 export const LOCALE_PREFIX: Record<SupportedLocale, string> = {
   en: "",
   zh: "/zh",
-  ja: "/ja",
-  fr: "/fr",
-  es: "/es",
-  ko: "/ko",
-  ru: "/ru",
-  ar: "/ar",
 };
 
 export const LOCALE_LABELS: Record<SupportedLocale, string> = {
   en: "English",
   zh: "简体中文",
-  ja: "日本語",
-  fr: "Français",
-  es: "Español",
-  ko: "한국어",
-  ru: "Русский",
-  ar: "العربية",
 };
 
 /**
- * `dir` attribute for a locale. Arabic is the only RTL locale; the SSG shell
+ * `dir` attribute for a locale. The supported UI languages are both LTR; the SSG shell
  * and the client-side locale sync must agree on this value.
  */
-export function localeDirection(locale: Locale): "ltr" | "rtl" {
-  return normalizeLocale(locale) === "ar" ? "rtl" : "ltr";
+export function localeDirection(_locale: Locale): "ltr" | "rtl" {
+  return "ltr";
 }
 
 /**
@@ -101,34 +71,13 @@ export function localeHtmlLang(locale: Locale): string {
 }
 
 export function getLocaleFromPath(pathname: string): SupportedLocale {
-  const segments = pathname.split("/").filter(Boolean);
-  if (segments.length > 0) {
-    const first = segments[0].toLowerCase();
-    if (first === "zh" || first === "zh-cn") return "zh";
-    if (first === "ja") return "ja";
-    if (first === "fr") return "fr";
-    if (first === "es") return "es";
-    if (first === "ko") return "ko";
-    if (first === "ru") return "ru";
-    if (first === "ar") return "ar";
-    if (first === "en") return "en";
-  }
-  return "en";
+  const first = pathname.split("/").filter(Boolean)[0]?.toLowerCase();
+  return first === "zh" || first === "zh-cn" ? "zh" : "en";
 }
 
 export function getPathWithoutLocale(path: string): string {
   const clean = path.startsWith("/") ? path : `/${path}`;
-  for (const prefix of [
-    "/zh-CN",
-    "/en",
-    "/zh",
-    "/ja",
-    "/fr",
-    "/es",
-    "/ko",
-    "/ru",
-    "/ar",
-  ]) {
+  for (const prefix of ["/zh-CN", "/en", "/zh"]) {
     if (clean === prefix) return "/";
     if (clean.startsWith(`${prefix}/`)) {
       return clean.slice(prefix.length) || "/";
@@ -165,12 +114,6 @@ function fullTitle(title: string, _locale: Locale): string {
 const OG_LOCALES: Record<SupportedLocale, string> = {
   en: "en_US",
   zh: "zh_CN",
-  ja: "ja_JP",
-  fr: "fr_FR",
-  es: "es_ES",
-  ko: "ko_KR",
-  ru: "ru_RU",
-  ar: "ar_AR",
 };
 
 export function buildSeoHead(input: SeoInput): SeoHead {
@@ -230,12 +173,6 @@ export function buildSeoHead(input: SeoInput): SeoHead {
     { rel: "canonical", href: canonical },
     { rel: "alternate", hreflang: "en", href: localeHref(path, "en") },
     { rel: "alternate", hreflang: "zh-CN", href: localeHref(path, "zh") },
-    { rel: "alternate", hreflang: "ja", href: localeHref(path, "ja") },
-    { rel: "alternate", hreflang: "fr", href: localeHref(path, "fr") },
-    { rel: "alternate", hreflang: "es", href: localeHref(path, "es") },
-    { rel: "alternate", hreflang: "ko", href: localeHref(path, "ko") },
-    { rel: "alternate", hreflang: "ru", href: localeHref(path, "ru") },
-    { rel: "alternate", hreflang: "ar", href: localeHref(path, "ar") },
     { rel: "alternate", hreflang: "x-default", href: localeHref(path, "en") },
   ];
 

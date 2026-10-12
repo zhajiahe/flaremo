@@ -15,39 +15,22 @@ export type { TranslationKey } from "./i18n/key";
 /** Interpolation values for translated messages ({count}, {date}, …). */
 export type TranslationParams = Record<string, string | number>;
 
-/** App locales mirror the marketing site: en/zh/ja/fr/es/ko/ru/ar. */
-export type Locale =
-  | "zh-CN"
-  | "en-US"
-  | "ja"
-  | "fr"
-  | "es"
-  | "ko"
-  | "ru"
-  | "ar";
+/** Supported user interface languages. */
+export type Locale = "zh-CN" | "en-US";
 
 const LOCALE_STORAGE_KEY = "flaremo.locale";
 
 type Messages = Record<TranslationKey, string>;
 
 // en-US is the fallback every `t` lookup ends at, so it stays in the entry
-// chunk. The other seven catalogs download on first use through
+// chunk. The Chinese catalog download on first use through
 // `loadLocaleMessages` and register here so `t` keeps reading synchronously.
 const messages: Partial<Record<Locale, Messages>> = {
   "en-US": enUS,
 };
 
-const localeLoaders: Record<
-  Exclude<Locale, "en-US">,
-  () => Promise<Messages>
-> = {
+const localeLoaders: Record<Exclude<Locale, "en-US">, () => Promise<Messages>> = {
   "zh-CN": () => import("./i18n/messages/zh-CN").then((module) => module.zhCN),
-  ja: () => import("./i18n/messages/ja").then((module) => module.ja),
-  fr: () => import("./i18n/messages/fr").then((module) => module.fr),
-  es: () => import("./i18n/messages/es").then((module) => module.es),
-  ko: () => import("./i18n/messages/ko").then((module) => module.ko),
-  ru: () => import("./i18n/messages/ru").then((module) => module.ru),
-  ar: () => import("./i18n/messages/ar").then((module) => module.ar),
 };
 
 const pendingPacks = new Map<Locale, Promise<Messages>>();
@@ -81,19 +64,13 @@ export function loadLocaleMessages(locale: Locale): Promise<Messages> {
 export const LOCALE_LABELS: Record<Locale, string> = {
   "zh-CN": "简体中文",
   "en-US": "English",
-  ja: "日本語",
-  fr: "Français",
-  es: "Español",
-  ko: "한국어",
-  ru: "Русский",
-  ar: "العربية",
 };
 
 export const SUPPORTED_LOCALES = Object.keys(LOCALE_LABELS) as Locale[];
 
-/** RTL only for Arabic; every other locale is LTR. */
-export function isRtlLocale(locale: Locale): boolean {
-  return locale === "ar";
+/** Both supported UI languages use left-to-right layout. */
+export function isRtlLocale(_locale: Locale): boolean {
+  return false;
 }
 
 type I18nContextValue = {
@@ -176,16 +153,7 @@ function matchNavigatorLocale(): Locale | null {
 }
 
 function isLocale(value: string | null): value is Locale {
-  return (
-    value === "zh-CN" ||
-    value === "en-US" ||
-    value === "ja" ||
-    value === "fr" ||
-    value === "es" ||
-    value === "ko" ||
-    value === "ru" ||
-    value === "ar"
-  );
+  return value === "zh-CN" || value === "en-US";
 }
 
 function interpolate(template: string, params?: TranslationParams) {
